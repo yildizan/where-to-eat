@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Restaurants";
+}
+
+@model MSAWeb.Models.Restaurant
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2>Restaurants</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Transportation</th>
+                    <th>Weather Dependency</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var restaurant in ViewBag.Data as List<MSAWeb.Models.Restaurant>)
+                {
+                    string transportation = restaurant.CarOrWalk == "C" ? "By Car" : "By Walking";
+                    string dependency = restaurant.WeatherDependency ? "Dependent" : "Independent";
+                    <tr>
+                        <td>@restaurant.Title</td>
+                        <td>@transportation</td>
+                        <td>@dependency</td>
+                        <td><a href="#" onclick="processRestaurant('/Restaurant/PrepareEdit/'+@restaurant.Id)"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
+                        <td><a href="#" onclick="processRestaurant('/Restaurant/PrepareDelete/'+@restaurant.Id)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-xs-6 text-left">
+        <button class="btn btn-primary btn-info" type="button" onclick="location.href='@Url.Action("Index", "Home")'">&lt; Back</button>
+    </div>
+    <div class="col-md-6 col-xs-6 text-right">
+        <button type="button" class="btn btn-info" onclick="processRestaurant('/Restaurant/PrepareAdd')">Add Restaurant</button>
+    </div>
+</div>
+
+<div class="modal fade" id="crud-modal">
+    <div class="modal-dialog">
+        <div id="modal-wrapper" class="modal-content">
+            <!-- modal burayi dolduracak -->
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var message = '@ViewBag.NotificationMessage';
+        if (message != '') {
+            $.growl({
+                title: '@ViewBag.NotificationTitle',
+                message: message,
+                style: '@ViewBag.NotificationType'
+            });
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    function processRestaurant(path) {
+        $.ajax({
+            method: 'GET',
+            url: path,
+            success: function (data) {
+                $('#modal-wrapper').html(data);
+                $('#crud-modal').modal();
+            },
+            error: function (data) {
+                var message = data.responseText;
+                $.growl({
+                    title: 'Error',
+                    message: message,
+                    style: 'error'
+                });
+            }
+        })
+    }
+</script>

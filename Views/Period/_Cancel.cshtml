@@ -1,0 +1,31 @@
+﻿@model MSAWeb.Models.Period
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Cancel Period</h3>
+</div>
+@using (Ajax.BeginForm("Cancel", "Period", FormMethod.Post, new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }))
+{
+    @Html.ValidationSummary()
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        @Html.HiddenFor(x => x.Id)
+
+        @Html.LabelFor(x => x.Length)
+        @Html.TextBoxFor(x => x.Length, new { @class = "form-control", @readonly = "true" })
+
+        @Html.LabelFor(x => x.Count)
+        @Html.TextBoxFor(x => x.Count, new { @class = "form-control", @readonly = "true" })
+
+        @Html.LabelFor(x => x.IsActive)
+        @Html.CheckBoxFor(x => x.IsActive, new { @class = "checkbox", @disabled = "disabled" })
+
+        @Html.LabelFor(x => x.IsPending)
+        @Html.CheckBoxFor(x => x.IsPending, new { @class = "checkbox", @disabled = "disabled" })
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="submit">Cancel</button>
+        <button class="btn btn-default" type="button" data-dismiss="modal">Back</button>
+    </div>
+}
+

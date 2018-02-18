@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@model DotNet.Highcharts.Container
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2>Statistics</h2>
+    </div>
+</div>
+
+@(Model)
+
+<div class="row">
+    <div class="col-md-12 col-xs-12 text-left">
+        <button class="btn btn-primary btn-info" type="button" onclick="location.href='@Url.Action("Index", "Home")'">&lt; Back</button>
+    </div>
+</div>

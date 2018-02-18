@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Nerede Yesek?</h1>
+    <p class="lead">An ASP.NET MVC application that suggests a restaurant for lunch...</p>
+</div>
+
+<ul class="nav nav-tabs nav-justified" >
+        <li class="btn text-center">
+            <button class="btn btn-primary btn-default" type="button" onclick="location.href='@Url.Action("Index", "Restaurant")'">Restaurants</button>
+        </li>
+        <li class="btn text-center">
+            <button class="btn btn-primary btn-default" type="button" onclick="location.href='@Url.Action("Index", "User")'">Users</button>
+        </li>
+        <li class="btn text-center">
+            <button class="btn btn-primary btn-default" type="button" onclick="location.href='@Url.Action("Index", "Period")'">Periods</button>
+        </li>
+        <li class="btn text-center">
+            <button class="btn btn-primary btn-default" type="button" onclick="location.href='@Url.Action("Index", "Statistic")'">Statistics</button>
+        </li>
+</ul>

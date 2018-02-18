@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "Periods";
+}
+
+@model MSAWeb.Models.Period
+
+<div class="row">
+    <div class="col-md-12 col-xs-12 text-center">
+        <h2>Periods</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Length</th>
+                    <th>Count</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var period in ViewBag.Data as List<MSAWeb.Models.Period>)
+                {
+                    string status = String.Empty;
+                    if (period.IsActive) { status = "In Progress"; }
+                    else if (period.IsPending) { status = "Pending"; }
+                    else if(period.Count < period.Length) { status = "Cancelled"; }
+                    else { status = "Completed"; }
+                    <tr>
+                        <td>@period.Length day(s)</td>
+                        <td>@period.Count day(s)</td>
+                        <td>@status</td>
+                        @if (period.IsActive || period.IsPending)
+                        {
+                            <td><a href="#" onclick="processPeriod('/Period/PrepareCancel/'+@period.Id)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (!ViewBag.ActiveFound && !ViewBag.PendingFound)
+{
+<div class="row">
+    <div class="col-md-12 col-xs-12 text-center">
+        <button type="button" class="btn btn-info" onclick="processPeriod('/Period/PrepareAdd')">Start Period</button>
+    </div>
+</div>
+}
+else
+{
+    if (ViewBag.PendingFound)
+    {
+<div class="row">
+    <h3 class="text-center">Pending Users</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Download</th>
+                    <th>Upload</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in ViewBag.PendingUsers as List<MSAWeb.Models.User>)
+                {
+                    <tr>
+                        <td>@user.Name</td>
+                        <td>@user.Surname</td>
+                        <td><a href="@Url.Action("Download", "Period", new { id = user.Id } )"><span class="glyphicon glyphicon-download" aria-hidden="true"></span></a></td>
+                        <td><a href="#" data-toggle="modal" data-target="#upload-modal"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+    }
+}
+
+<div class="row">
+    <div class="col-md-12 col-xs-12 text-left">
+        <button class="btn btn-primary btn-info" type="button" onclick="location.href='@Url.Action("Index", "Home")'">&lt; Back</button>
+    </div>
+</div>
+
+<div class="modal fade" id="crud-modal">
+    <div class="modal-dialog">
+        <div id="modal-wrapper" class="modal-content">
+            <!-- modal burayi dolduracak -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="upload-modal">
+    <div class="modal-dialog">
+        <div id="modal-wrapper" class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Upload Rating File</h3>
+            </div>
+            @using (Html.BeginForm("Upload", "Period", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-body">
+                    <label for="file">Rating File:</label>
+                    <input type="file" name="file" id="file" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="submit">Upload</button>
+                    <button class="btn btn-default" type="button" data-dismiss="modal">Cancel</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var message = '@ViewBag.NotificationMessage';
+        if (message != '') {
+            $.growl({
+                title: '@ViewBag.NotificationTitle',
+                message: message,
+                style: '@ViewBag.NotificationType'
+            });
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    function processPeriod(path) {
+        $.ajax({
+            method: 'GET',
+            url: path,
+            success: function (data) {
+                $('#modal-wrapper').html(data);
+                $('#crud-modal').modal();
+            }
+        })
+    }
+</script>
