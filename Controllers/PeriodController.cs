@@ -147,7 +147,7 @@ namespace MSAWeb.Controllers
                     sheet.Cells[2, 2].Value = user.Id;
                     sheet.Cells[3, 2].Value = user.Name;
                     sheet.Cells[4, 2].Value = user.Surname;
-                    int location = 7;   // excelde restoran listesinin başlama yeri
+                    int location = 7;   // starting point of restaurant list in document
                     foreach (var restaurant in DatabaseManager.Instance.Restaurants.ToList().OrderBy(x => x.Title))
                     {
                         sheet.Cells[location, 1].Value = restaurant.Id;
@@ -185,7 +185,7 @@ namespace MSAWeb.Controllers
                         var sheet = package.Workbook.Worksheets[1];
                         long userId = Convert.ToInt64(sheet.Cells[2, 2].Value);
                         long periodId = DatabaseManager.Instance.Periods.Where(x => x.IsPending).FirstOrDefault().Id;
-                        int location = 7;   // excelde restoran listesinin başlama yeri
+                        int location = 7;   // starting point of restaurant list in document
                         for (int i = 0; i < DatabaseManager.Instance.Restaurants.Count(); i++)
                         {
                             var rating = new RatingHistory();

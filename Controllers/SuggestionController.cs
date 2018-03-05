@@ -57,17 +57,17 @@ namespace MSAWeb.Controllers
                     while (!found && comparisonList.Count > 0)
                     {
                         best = comparisonList.Aggregate((rest1, rest2) => rest1.Average > rest2.Average ? rest1 : rest2);
-                        // son önerilen kontrolü
+                        // last suggested check
                         if(lastSuggested != null && lastSuggested.RestaurantId == best.Item.Id)
                         {
                             comparisonList.Remove(best);
                         }
-						// 3 günde 2 araba kontrolü
+						// 2 car transportation in 3 days check
                         else if (carCheck && best.Item.CarOrWalk == "C")
                         {
                             comparisonList.Remove(best);
                         }
-                        // hava durumu kontrolü
+                        // weather condition check
                         else if(best.Item.WeatherDependency && best.Item.CarOrWalk == "W" && (weatherCondition == Weather.Rainy || weatherCondition == Weather.Snowy))
                         {
                             comparisonList.Remove(best);
